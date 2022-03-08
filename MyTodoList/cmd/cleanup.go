@@ -6,8 +6,7 @@ package cmd
 
 import (
 	"fmt"
-	cmd "github.com/majorchork/week4/mytodolist/MyTodoList/cmd/model"
-
+	cmd2 "github.com/majorchork/week4/mytodolist/MyTodoList/cmd/model"
 	"github.com/spf13/cobra"
 )
 
@@ -23,13 +22,13 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("cleanup called")
+		list := cmd2.ListItem{}
+		list.CleanUp()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(cleanupCmd)
-	list := cmd.ListItem{}
-	list.CleanUp()
 
 	// Here you will define your flags and configuration settings.
 

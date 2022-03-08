@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 )
 
 type ListItem struct {
@@ -13,9 +14,8 @@ type ListItem struct {
 }
 
 var L = ListItem{}
-var list = []ListItem{}
 
-var CsvData, _ = ioutil.ReadFile("todo.csv")
+var list = []ListItem{}
 
 func (t *ListItem) unmarshalCsv() {
 	CsvData, _ := ioutil.ReadFile("todo.csv")
@@ -23,6 +23,7 @@ func (t *ListItem) unmarshalCsv() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
 
 func init() {
@@ -42,15 +43,22 @@ func (t *ListItem) savetoCsv() {
 	}
 }
 
-func (t ListItem) Add(Item string) []ListItem {
-	t.Item = Item
-	list = append(list, t)
-	t.savetoCsv()
-	return list
-
+func (t ListItem) Add(Item string) string {
+	if Item != "" {
+		t.Item = Item
+		list = append(list, t)
+		t.savetoCsv()
+		return "item successfully added"
+	}
+	return "invalid input string, please enter a valid"
 }
-func (t *ListItem) Done(serialNo int) []ListItem {
-	//unmarshalCsv()
+
+func (t *ListItem) Done(serlNo string) []ListItem {
+
+	serialNo, err := strconv.Atoi(serlNo)
+	if err != nil {
+		panic(err)
+	}
 	if serialNo != 0 {
 		for i := range list {
 			if i == (serialNo - 1) {
@@ -64,7 +72,12 @@ func (t *ListItem) Done(serialNo int) []ListItem {
 	fmt.Println("please input a valid serial no above 0")
 	return list
 }
-func (t *ListItem) UnDone(serialNo int) []ListItem {
+
+func (t *ListItem) UnDone(serNo string) []ListItem {
+	serialNo, err := strconv.Atoi(serNo)
+	if err != nil {
+		panic(err)
+	}
 	if serialNo != 0 {
 		for i := range list {
 			if i == (serialNo-1) && list[i].Status == true {
@@ -93,6 +106,7 @@ func (t *ListItem) CleanUp() bool {
 	fmt.Println("please enter a valid input string")
 	return false
 }
+
 func (t *ListItem) PrintList() {
 	for i, value := range list {
 		if value.Status == false {

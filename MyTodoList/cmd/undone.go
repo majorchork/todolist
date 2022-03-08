@@ -6,8 +6,7 @@ package cmd
 
 import (
 	"fmt"
-	cmd "github.com/majorchork/week4/mytodolist/MyTodoList/cmd/model"
-
+	cmd2 "github.com/majorchork/week4/mytodolist/MyTodoList/cmd/model"
 	"github.com/spf13/cobra"
 )
 
@@ -22,14 +21,14 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		list := cmd2.ListItem{}
+		list.UnDone(args[0])
 		fmt.Println("undone called")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(undoneCmd)
-	list := cmd.ListItem{}
-	list.UnDone(1)
 
 	// Here you will define your flags and configuration settings.
 
