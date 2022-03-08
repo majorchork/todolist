@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"fmt"
+	cmd "github.com/majorchork/week4/mytodolist/MyTodoList/cmd/model"
 
 	"github.com/spf13/cobra"
 )
@@ -27,6 +28,8 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+	list := cmd.ListItem{}
+	list.PrintList()
 
 	// Here you will define your flags and configuration settings.
 

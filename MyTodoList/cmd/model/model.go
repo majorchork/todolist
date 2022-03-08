@@ -5,122 +5,98 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"strings"
 )
 
-type listItem = struct {
-	SN     int
-	Item   string
-	Status bool
+type ListItem struct {
+	Item   string `json:"item"`
+	Status bool   `json:"status"`
 }
 
-var list []listItem
-var CsvData, err = ioutil.ReadFile("todo.csv")
+var L = ListItem{}
+var list = []ListItem{}
 
-//func CsvCreate() {
-//	csvfile, err := os.Create("data.csv")
-//	if err != nil {
-//		log.Fatalf("csv create failed")
-//	}
-//	csvwriter := csv.NewWriter(csvfile)
-//	for _, Input := range list {
-//		_ = csvwriter.Write(Input)
-//	}
-//	csvwriter.Flush()
-//	csvwriter.Close()
-//}
-func unmarshalCsv() {
+var CsvData, _ = ioutil.ReadFile("todo.csv")
+
+func (t *ListItem) unmarshalCsv() {
+	CsvData, _ := ioutil.ReadFile("todo.csv")
 	err := json.Unmarshal(CsvData, &list)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
-func savetoCsv() {
+
+func init() {
+	L.unmarshalCsv()
+}
+
+func (t *ListItem) savetoCsv() {
 	jsonData, err := json.Marshal(list)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	CsvData = append(CsvData, jsonData...)
-	ioutil.WriteFile("todo.csv", CsvData, 0777)
-}
-func (t *listItem) Add(Item string, index int) []listItem {
-	ItemCheck := strings.Trim(Item, " ")
-	if ItemCheck != "" {
-		list = append(list, listItem{
-			SN:     index,
-			Item:   Item,
-			Status: false,
-		})
-		//jsonData, err := json.Marshal(list)
-		//if err != nil {
-		//	log.Fatal(err)
-		//}
-		//
-		//CsvData = append(CsvData, jsonData...)
-		//ioutil.WriteFile("todo.csv", CsvData, 0777)
-		savetoCsv()
-		return list
-		fmt.Println("Item Successfully Added")
+	//CsvData = append(CsvData, jsonData...)
+	err = ioutil.WriteFile("todo.csv", jsonData, 0777)
+	if err != nil {
+		log.Fatal(err)
 	}
-	fmt.Println("please enter a valid input string")
-	return list
-}
-func (t *listItem) Done(serialNo int) bool {
-	//err := json.Unmarshal(CsvData, &list)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	unmarshalCsv()
-	if serialNo != 0 {
-		for i, _ := range list {
-			if i == (serialNo - 1) {
-				t.Status = true
-			}
-		}
-		savetoCsv()
-		fmt.Println("item status updated")
-		return true
-	}
-	fmt.Println("please input a valid serial no above 0")
-	return false
-}
-func (t *listItem) UnDone(serialNo int) bool {
-	unmarshalCsv()
-	if serialNo != 0 {
-		for i, _ := range list {
-			if i == (serialNo-1) && t.Status == true {
-				t.Status = false
-			}
-			savetoCsv()
-			fmt.Println("item status updated")
-			return true
-		}
-		fmt.Println("item status is already Undone please enter the correct serial no")
-		return false
-	}
-	fmt.Println("please input a valid serial no above 0")
-	return false
 }
 
-func (t *listItem) CleanUp() bool {
-	unmarshalCsv()
+func (t ListItem) Add(Item string) []ListItem {
+	t.Item = Item
+	list = append(list, t)
+	t.savetoCsv()
+	return list
+
+}
+func (t *ListItem) Done(serialNo int) []ListItem {
+	//unmarshalCsv()
+	if serialNo != 0 {
+		for i := range list {
+			if i == (serialNo - 1) {
+				list[i].Status = true
+				fmt.Println("item status updated")
+			}
+		}
+		t.savetoCsv()
+		return list
+	}
+	fmt.Println("please input a valid serial no above 0")
+	return list
+}
+func (t *ListItem) UnDone(serialNo int) []ListItem {
+	if serialNo != 0 {
+		for i := range list {
+			if i == (serialNo-1) && list[i].Status == true {
+				list[i].Status = false
+			}
+			t.savetoCsv()
+			fmt.Println("item status updated")
+			return list
+		}
+		fmt.Println("item status is already Undone please enter the correct serial no")
+		return list
+	}
+	fmt.Println("please input a valid serial no above 0")
+	return list
+}
+
+func (t *ListItem) CleanUp() bool {
 	for i, value := range list {
 		if value.Status == true {
 			list = append(list[:i], list[1+1:]...)
-			savetoCsv()
-			return true
+			t.savetoCsv()
 			fmt.Println("Item Successfully Added")
+			return true
 		}
 	}
 	fmt.Println("please enter a valid input string")
 	return false
 }
-func (t *listItem) PrintList() {
-	unmarshalCsv()
+func (t *ListItem) PrintList() {
 	for i, value := range list {
 		if value.Status == false {
-			fmt.Printf("%v, %v/n", i+1, value.Item)
+			fmt.Printf("%v, %v\n", i+1, value.Item)
 			continue
 		}
 	}

@@ -6,11 +6,17 @@ package cmd
 
 import (
 	"fmt"
-
+	"github.com/majorchork/week4/mytodolist/MyTodoList/cmd/model"
 	"github.com/spf13/cobra"
 )
 
 // addCmd represents the add command
+//type ListItem = struct {
+//	SN     int
+//	Item   string
+//	Status bool
+//}
+
 var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "A brief description of your command",
@@ -26,6 +32,9 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
+	list := cmd.ListItem{}
+	list.Add("drink water")
+
 	rootCmd.AddCommand(addCmd)
 
 	// Here you will define your flags and configuration settings.
