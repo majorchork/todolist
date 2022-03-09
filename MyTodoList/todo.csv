@@ -1,1 +1,6 @@
-[{"chuks":"","status":false},{"chuks":"","status":false},{"chuks":"","status":false},{"chuks":"change oil","status":false}]
+[
+	{
+		"item": "wash plate",
+		"status": false
+	}
+]

@@ -19,11 +19,12 @@ var list = []ListItem{}
 
 func (t *ListItem) unmarshalCsv() {
 	CsvData, _ := ioutil.ReadFile("todo.csv")
-	err := json.Unmarshal(CsvData, &list)
-	if err != nil {
-		log.Fatal(err)
+	if string(CsvData) != "" {
+		err := json.Unmarshal(CsvData, &list)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-
 }
 
 func init() {
@@ -31,12 +32,10 @@ func init() {
 }
 
 func (t *ListItem) savetoCsv() {
-	jsonData, err := json.Marshal(list)
+	jsonData, err := json.MarshalIndent(list, "", "\t")
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	//CsvData = append(CsvData, jsonData...)
 	err = ioutil.WriteFile("todo.csv", jsonData, 0777)
 	if err != nil {
 		log.Fatal(err)
@@ -44,74 +43,75 @@ func (t *ListItem) savetoCsv() {
 }
 
 func (t ListItem) Add(Item string) string {
-	if Item != "" {
-		t.Item = Item
-		list = append(list, t)
-		t.savetoCsv()
-		return "item successfully added"
+	if Item == "" {
+		return "invalid input string, please enter a valid"
 	}
-	return "invalid input string, please enter a valid"
+	t.Item = Item
+	list = append(list, t)
+	t.savetoCsv()
+	return "item successfully added"
 }
 
-func (t *ListItem) Done(serlNo string) []ListItem {
+func (t *ListItem) Done(serlNo string) string {
 
 	serialNo, err := strconv.Atoi(serlNo)
 	if err != nil {
-		panic(err)
+		log.Fatal("error marking as done")
 	}
-	if serialNo != 0 {
-		for i := range list {
-			if i == (serialNo - 1) {
-				list[i].Status = true
-				fmt.Println("item status updated")
-			}
+	if serialNo == 0 {
+		fmt.Println("please input a valid serial no above 0")
+		return "please input a valid serial no above 0"
+	}
+	for i := range list {
+		if i == (serialNo - 1) {
+			list[i].Status = true
+			fmt.Println("item status updated")
 		}
-		t.savetoCsv()
-		return list
 	}
-	fmt.Println("please input a valid serial no above 0")
-	return list
+	t.savetoCsv()
+	return "item status updated"
 }
 
-func (t *ListItem) UnDone(serNo string) []ListItem {
+func (t *ListItem) UnDone(serNo string) string {
 	serialNo, err := strconv.Atoi(serNo)
 	if err != nil {
-		panic(err)
+		log.Fatal("error converting string")
 	}
-	if serialNo != 0 {
-		for i := range list {
-			if i == (serialNo-1) && list[i].Status == true {
-				list[i].Status = false
-			}
-			t.savetoCsv()
+	if serialNo == 0 {
+		fmt.Println("please input a valid serial no above 0")
+		return "please input a valid serial no above 0"
+	}
+	for i := range list {
+		if i == (serialNo - 1) {
+			list[i].Status = false
 			fmt.Println("item status updated")
-			return list
 		}
-		fmt.Println("item status is already Undone please enter the correct serial no")
-		return list
+		t.savetoCsv()
+		return "kpomo"
+
 	}
-	fmt.Println("please input a valid serial no above 0")
-	return list
+	return "item updated"
 }
 
 func (t *ListItem) CleanUp() bool {
 	for i, value := range list {
 		if value.Status == true {
-			list = append(list[:i], list[1+1:]...)
+			list = append(list[:i], list[i+1:]...)
 			t.savetoCsv()
-			fmt.Println("Item Successfully Added")
+			fmt.Println("list successfully cleaned")
 			return true
 		}
 	}
-	fmt.Println("please enter a valid input string")
+	fmt.Println("list is clean")
 	return false
 }
 
-func (t *ListItem) PrintList() {
+func (t *ListItem) PrintList() string {
 	for i, value := range list {
 		if value.Status == false {
 			fmt.Printf("%v, %v\n", i+1, value.Item)
 			continue
 		}
 	}
+	return "The Todo List"
 }
