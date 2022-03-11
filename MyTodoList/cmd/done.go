@@ -14,12 +14,8 @@ import (
 var doneCmd = &cobra.Command{
 	Use:   "done",
 	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long: `After a task, use this to mark a task as done
+This is a soft delete function for the tasks you mark as done, only displaying undone tasks`,
 	Run: func(cmd *cobra.Command, args []string) {
 		list := cmd2.ListItem{}
 		list.Done(args[0])

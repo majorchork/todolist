@@ -13,13 +13,13 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "mytodolist",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "my todolist is a golang-cobra cli application ",
+	Long: `mytodolist CLI application will do the following:
+· List: list out all tasks that are not done
+· Cleanup: delete tasks that have been done
+· Add: add task to the list of tasks
+· Done: would mark a task as done
+· Undone: would mark a task as undone`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
