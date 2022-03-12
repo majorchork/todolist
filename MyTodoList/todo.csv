@@ -1,6 +1,18 @@
 [
 	{
-		"item": "wash plate",
+		"item": "chill drinks",
+		"status": false
+	},
+	{
+		"item": "chill with the big boys",
+		"status": true
+	},
+	{
+		"item": "chill with the big girls",
+		"status": false
+	},
+	{
+		"item": "change oil",
 		"status": false
 	}
 ]

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"strconv"
+	"strings"
 )
 
 type ListItem struct {
@@ -43,13 +44,14 @@ func (t *ListItem) savetoCsv() {
 }
 
 func (t ListItem) Add(Item string) string {
-	if Item == "" {
+	itemCheck := strings.Trim(Item, " ")
+	if itemCheck == "" {
 		return "invalid input string, please enter a valid"
 	}
 	t.Item = Item
 	list = append(list, t)
 	t.savetoCsv()
-	return "item successfully added"
+	return Item + " successfully added"
 }
 
 func (t *ListItem) Done(serlNo string) string {
@@ -65,7 +67,6 @@ func (t *ListItem) Done(serlNo string) string {
 	for i := range list {
 		if i == (serialNo - 1) {
 			list[i].Status = true
-			fmt.Println("item status updated")
 		}
 	}
 	t.savetoCsv()
@@ -84,13 +85,13 @@ func (t *ListItem) UnDone(serNo string) string {
 	for i := range list {
 		if i == (serialNo - 1) {
 			list[i].Status = false
+			t.savetoCsv()
 			fmt.Println("item status updated")
+			return "item status updated"
 		}
-		t.savetoCsv()
-		return "kpomo"
 
 	}
-	return "item updated"
+	return "invalid input"
 }
 
 func (t *ListItem) CleanUp() bool {
@@ -101,6 +102,7 @@ func (t *ListItem) CleanUp() bool {
 			fmt.Println("list successfully cleaned")
 			return true
 		}
+		continue
 	}
 	fmt.Println("list is clean")
 	return false
@@ -109,7 +111,7 @@ func (t *ListItem) CleanUp() bool {
 func (t *ListItem) PrintList() string {
 	for i, value := range list {
 		if value.Status == false {
-			fmt.Printf("%v, %v\n", i+1, value.Item)
+			fmt.Printf("%v %v\n", i+1, value.Item)
 			continue
 		}
 	}

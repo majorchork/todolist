@@ -8,8 +8,8 @@ func TestListItem_Add(t *testing.T) {
 		input  string
 		want   string
 	}{
-		{ListItem{"change oil", false}, "change oil", "item successfully added"},
-		{ListItem{"", false}, "", "invalid input string, please enter a valid"},
+		{ListItem{"change oil", false}, "change oil", "change oil successfully added"},
+		{ListItem{"", false}, "   ", "invalid input string, please enter a valid"},
 	}
 	for _, test := range add {
 		got := test.input1.Add(test.input)
@@ -41,7 +41,7 @@ func TestListItem_UnDone(t *testing.T) {
 		want   string
 	}{
 		{ListItem{"change oil", false}, "2", "item status updated"},
-		//{ListItem{"change oil", true}, "3", "item status is already Undone please enter the correct serial no"},
+		{ListItem{"change oil", true}, "30", "invalid input"},
 		{ListItem{"", false}, "0", "please input a valid serial no above 0"},
 	}
 	for _, test := range undone {

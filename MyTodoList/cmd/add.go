@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	cmd2 "github.com/majorchork/week4/mytodolist/MyTodoList/cmd/model"
 	"github.com/spf13/cobra"
 )
@@ -25,6 +26,7 @@ var addCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		list := cmd2.ListItem{}
 		list.Add(args[0])
+		fmt.Println(args[0] + " added to list")
 	},
 }
 

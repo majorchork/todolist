@@ -19,7 +19,7 @@ This is a soft delete function for the tasks you mark as done, only displaying u
 	Run: func(cmd *cobra.Command, args []string) {
 		list := cmd2.ListItem{}
 		list.Done(args[0])
-		fmt.Println("done called")
+		fmt.Println("item status updated")
 	},
 }
 

@@ -13,8 +13,8 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "mytodolist",
-	Short: "my todolist is a golang-cobra cli application ",
-	Long: `mytodolist CLI application will do the following:
+	Short: "A golang cli app that creates lists of items",
+	Long: `todolist CLI application will do the following:
 · List: list out all tasks that are not done
 · Cleanup: delete tasks that have been done
 · Add: add task to the list of tasks
